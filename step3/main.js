@@ -32,7 +32,12 @@ function getFatturatoByAgent(privilege) {
         "url": "getFatturatoByAgent.php?access=" + privilege,
         "method": "GET",
         "success": function(data) {
-            generatePieGraphic(privilege, data);
+            if (data.error) {
+                $(".containerPie").text(data.error);
+            } else {
+                generatePieGraphic(privilege, data);
+            }
+
         },
         "error": function(err) {
             console.log("Errore");
@@ -46,7 +51,11 @@ function getTeamEfficiencyGraphic(privilege) {
         "url": "getTeamEfficiency.php?access=" + privilege,
         "method": "GET",
         "success": function(data) {
-            generateTeamEfficiencyGraphic(privilege, data);
+            if (data.error) {
+                $(".containerEfficiency").text(data.error);
+            } else {
+                generateTeamEfficiencyGraphic(privilege, data);
+            }
         },
         "error": function(err) {
             console.log("Errore");
