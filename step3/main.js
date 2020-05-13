@@ -1,7 +1,9 @@
 function init() {
-    generateLineGraphic();
-    generatePieGraphic();
-    generateTeamEfficiencyGraphic()
+    var searchParams = new URLSearchParams(window.location.search);
+    var privilege = searchParams.get("access");
+    generateLineGraphic(privilege);
+    generatePieGraphic(privilege);
+    generateTeamEfficiencyGraphic(privilege)
 
 };
 // FUNZIONI----------------------------------------------------------------
@@ -10,14 +12,15 @@ function getMonths() {
     return moment.months();
 }
 //--------------------------------------------------------------
-function generateLineGraphic() {
+function generateLineGraphic(privilege) {
+
     $.ajax({
-        "url": "getFatturato.php",
+        "url": "getFatturato.php?access=" + privilege,
         "method": "GET",
         "success": function(data) {
             var ctx = $('#myChartLine');
             var months = getMonths();
-            var data = data.fatturato.data;
+            var fatturato = data.data;
             var type = 'line';
             var myChart = new Chart(ctx, {
                 type: type,
@@ -25,7 +28,7 @@ function generateLineGraphic() {
                     labels: months,
                     datasets: [{
                         label: 'Vendite',
-                        data: data,
+                        data: fatturato,
                         backgroundColor: [
                             'rgba(150, 33, 146, 1)',
                             'rgba(82, 40, 204, 1)',
@@ -63,15 +66,15 @@ function generateLineGraphic() {
             });
         },
         "error": function(err) {
-            console.log(err);
+            console.log("Errore");
         }
     });
 }
 
 //---------------------------------------------------------------------------
-function generatePieGraphic() {
+function generatePieGraphic(privilege) {
     $.ajax({
-        "url": "getFatturatoByAgent.php",
+        "url": "getFatturatoByAgent.php?access=" + privilege,
         "method": "GET",
         "success": function(data) {
             var ctx = $('#myChartPie');
@@ -126,25 +129,23 @@ function generatePieGraphic() {
 }
 
 //------------------------------------------------------------------------
-function generateTeamEfficiencyGraphic() {
+function generateTeamEfficiencyGraphic(privilege) {
     $.ajax({
-        "url": "getTeamEfficiency.php",
+        "url": "getTeamEfficiency.php?access=" + privilege,
         "method": "GET",
         "success": function(data) {
-            console.log(data);
             var ctx = $('#myChartEfficiency');
             var type = data.type;
             var names = data.labels;
             var months = getMonths();
             var fatturato = data.fatturato;
-            console.log(fatturato[1]);
             var myChart = new Chart(ctx, {
                 type: type,
                 data: {
                     labels: months,
                     datasets: [{
-                            label: names[0],
-                            data: fatturato[0],
+                            label: names,
+                            data: fatturato,
                             borderColor: [
                                 'rgb(4,51,255)',
                             ],
