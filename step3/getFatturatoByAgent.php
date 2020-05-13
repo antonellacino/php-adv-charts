@@ -4,7 +4,6 @@ header('Content-Type: application/json');
 
 include "database.php";
 
-
 $privilege=$_GET['access'];
 
 if($privilege==="employee" or $privilege==="clevel"){
@@ -17,6 +16,4 @@ if($privilege==="employee" or $privilege==="clevel"){
 }else{
     echo json_encode(['error'=>'Non hai i privilegi per vedere queste informazioni']);
 }
-
-
 ?>

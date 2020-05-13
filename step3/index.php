@@ -12,12 +12,12 @@
 </head>
 
 <body>
-  <h1>Grafico</h1>
+  <h1>Fatturato</h1>
   <div class="containerLine">
     <canvas id="myChartLine"></canvas>
   </div>
 
-  <h1>Grafico a torta</h1>
+  <h1>Fatturato by agent</h1>
   <div class="containerPie">
     <canvas id="myChartPie"></canvas>
   </div>

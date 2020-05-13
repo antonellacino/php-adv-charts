@@ -2,7 +2,6 @@
 
 header('Content-Type: application/json');
 
-
 include "database.php";
 
 $privilege=$_GET['access'];

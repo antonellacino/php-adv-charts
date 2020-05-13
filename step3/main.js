@@ -37,7 +37,6 @@ function getFatturatoByAgent(privilege) {
             } else {
                 generatePieGraphic(privilege, data);
             }
-
         },
         "error": function(err) {
             console.log("Errore");
