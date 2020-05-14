@@ -1,24 +1,24 @@
 function init() {
+    moment.locale('it');
     var searchParams = new URLSearchParams(window.location.search);
     var privilege = searchParams.get("access");
-    getFatturato(privilege);
+    getFatturato();
     getFatturatoByAgent(privilege);
     getTeamEfficiencyGraphic(privilege);
 };
 
 // FUNZIONI----------------------------------------------------------------
 function getMonths() {
-    moment.locale('it');
     return moment.months();
 }
 
 //--------------------------------------------------------------------------
-function getFatturato(privilege) {
+function getFatturato() {
     $.ajax({
-        "url": "getFatturato.php?access=" + privilege,
+        "url": "getFatturato.php",
         "method": "GET",
         "success": function(data) {
-            generateLineGraphic(privilege, data);
+            generateFatturatoGraphic(data);
         },
         "error": function(err) {
             console.log("Errore");
@@ -29,13 +29,16 @@ function getFatturato(privilege) {
 //-----------------------------------------------------------------------
 function getFatturatoByAgent(privilege) {
     $.ajax({
-        "url": "getFatturatoByAgent.php?access=" + privilege,
+        "url": "getFatturatoByAgent.php",
         "method": "GET",
+        "data": {
+            access: privilege
+        },
         "success": function(data) {
             if (data.error) {
-                $(".containerPie").text(data.error);
+                $(".containerPie").text("");
             } else {
-                generatePieGraphic(privilege, data);
+                generateFatturatoByAgentGraphic(data);
             }
         },
         "error": function(err) {
@@ -47,13 +50,16 @@ function getFatturatoByAgent(privilege) {
 //-----------------------------------------------------------------------
 function getTeamEfficiencyGraphic(privilege) {
     $.ajax({
-        "url": "getTeamEfficiency.php?access=" + privilege,
+        "url": "getTeamEfficiency.php",
         "method": "GET",
+        "data": {
+            access: privilege
+        },
         "success": function(data) {
             if (data.error) {
-                $(".containerEfficiency").text(data.error);
+                $(".containerEfficiency").text("");
             } else {
-                generateTeamEfficiencyGraphic(privilege, data);
+                generateTeamEfficiencyGraphic(data);
             }
         },
         "error": function(err) {
@@ -63,7 +69,7 @@ function getTeamEfficiencyGraphic(privilege) {
 }
 
 //--------------------------------------------------------------
-function generateLineGraphic(privilege, data) {
+function generateFatturatoGraphic(data) {
     var ctx = $('#myChartLine');
     var months = getMonths();
     var fatturato = data.data;
@@ -113,7 +119,7 @@ function generateLineGraphic(privilege, data) {
 }
 
 //---------------------------------------------------------------------------
-function generatePieGraphic(privilege, data) {
+function generateFatturatoByAgentGraphic(data) {
     var ctx = $('#myChartPie');
     var fatturato = data.fatturato;
     var names = data.labels;
@@ -161,7 +167,7 @@ function generatePieGraphic(privilege, data) {
 }
 
 //------------------------------------------------------------------------
-function generateTeamEfficiencyGraphic(privilege, data) {
+function generateTeamEfficiencyGraphic(data) {
     var ctx = $('#myChartEfficiency');
     var type = data.type;
     var names = data.labels;
